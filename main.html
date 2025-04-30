@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Expense Tracker</h1>
+    <nav>
+      <a href="main.html">Home</a> |
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <section class="balance-summary">
+    <div>
+      <h3>Income</h3>
+      <p id="income-amount">₹0.00</p>
+    </div>
+    <div>
+      <h3>Expenses</h3>
+      <p id="expense-amount">₹0.00</p>
+    </div>
+    <div>
+      <h3>Available</h3>
+      <p id="available-amount">₹0.00</p>
+    </div>
+  </section>
+
+  <section class="transaction-form">
+    <h2>Add New Transaction</h2>
+    <form id="transaction-form">
+      <label>
+        Transaction Type:
+        <select id="transaction-type" required>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </label>
+
+      <label>
+        Category:
+        <select id="category" required>
+          <option value="Food">Food</option>
+          <option value="Transportation">Transportation</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Other">Other</option>
+        </select>
+      </label>
+
+      <label>
+        Description:
+        <input type="text" id="description" placeholder="Description" required />
+      </label>
+
+      <label>
+        Amount (₹):
+        <input type="number" id="amount" min="0.01" step="0.01" placeholder="0.00" required />
+      </label>
+
+      <button type="submit">Add Transaction</button>
+    </form>
+  </section>
+
+  <section class="transaction-history">
+    <h2>Transaction History</h2>
+    <table id="history-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Amount (₹)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5">No transactions yet.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const incomeAmountEl = document.getElementById('income-amount');
+    const expenseAmountEl = document.getElementById('expense-amount');
+    const availableAmountEl = document.getElementById('available-amount');
+    const form = document.getElementById('transaction-form');
+    const historyTableBody = document.querySelector('#history-table tbody');
+
+    let incomeTotal = 0;
+    let expenseTotal = 0;
+    let transactions = [];
+
+    function updateSummary() {
+      incomeAmountEl.textContent = `₹${incomeTotal.toFixed(2)}`;
+      expenseAmountEl.textContent = `₹${expenseTotal.toFixed(2)}`;
+      availableAmountEl.textContent = `₹${(incomeTotal - expenseTotal).toFixed(2)}`;
+    }
+
+    function renderHistory() {
+      historyTableBody.innerHTML = '';
+      if (transactions.length === 0) {
+        historyTableBody.innerHTML = '<tr><td colspan="5">No transactions yet.</td></tr>';
+        return;
+      }
+      transactions.forEach((tx, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</td>
+          <td>${tx.category}</td>
+          <td>${tx.description}</td>
+          <td>${tx.type === 'expense' ? '-' : ''}₹${tx.amount.toFixed(2)}</td>
+          <td><button data-index="${index}" class="delete-btn">Delete</button></td>
+        `;
+        historyTableBody.appendChild(tr);
+      });
+    }
+
+    function addTransaction(tx) {
+      transactions.push(tx);
+      if (tx.type === 'income') {
+        incomeTotal += tx.amount;
+      } else {
+        expenseTotal += tx.amount;
+      }
+      updateSummary();
+      renderHistory();
+    }
+
+    function deleteTransaction(index) {
+      const tx = transactions[index];
+      if (tx.type === 'income') {
+        incomeTotal -= tx.amount;
+      } else {
+        expenseTotal -= tx.amount;
+      }
+      transactions.splice(index, 1);
+      updateSummary();
+      renderHistory();
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const type = document.getElementById('transaction-type').value;
+      const category = document.getElementById('category').value;
+      const description = document.getElementById('description').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+
+      if (type === 'expense' && amount > (incomeTotal - expenseTotal)) {
+        alert('Expense exceeds available balance.');
+        return;
+      }
+
+      if (!description || amount <= 0) {
+        alert('Please enter valid description and amount.');
+        return;
+      }
+
+      addTransaction({ type, category, description, amount });
+
+      form.reset();
+    });
+
+    historyTableBody.addEventListener('click', e => {
+      if (e.target.classList.contains('delete-btn')) {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        deleteTransaction(index);
+      }
+    });
+
+    updateSummary();
+    renderHistory();
+  </script>
+</body>
+</html>

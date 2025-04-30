@@ -1,0 +1,130 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+header h1 {
+  margin: 0 0 10px 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #007bff;
+  margin-right: 10px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Balance summary */
+.balance-summary {
+  display: flex;
+  justify-content: space-around;
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.balance-summary div {
+  text-align: center;
+}
+
+.balance-summary h3 {
+  margin-bottom: 5px;
+}
+
+/* Transaction form */
+.transaction-form {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.transaction-form form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.transaction-form label {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.transaction-form input,
+.transaction-form select {
+  padding: 5px;
+  font-size: 1em;
+  margin-top: 5px;
+}
+
+.transaction-form button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: 25px;
+}
+
+.transaction-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Transaction history */
+.transaction-history {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.transaction-history table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-history th,
+.transaction-history td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.transaction-history th {
+  background-color: #007bff;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background-color: #a71d2a;
+}
+
+/* About page */
+.about-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
